@@ -1,47 +1,29 @@
 package me.fp.presentation.functor.impl
 
 import me.fp.presentation.functor.Functor
-import me.fp.presentation.functor.FunctorOf
 
-sealed class Maybe<A>
+class ForMaybe private constructor() {
+    companion object
+}
+typealias MaybeOf<A> = arrow.Kind<ForMaybe, A>
 
+@Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
+inline fun <A> MaybeOf<A>.fix(): Maybe<A> =
+        this as Maybe<A>
+
+sealed class Maybe<A> : MaybeOf<A>
 data class Just<A>(val a: A) : Maybe<A>()
 object Empty : Maybe<Nothing>()
 
 
-object FunctorInstances {
-/*    fun <A, B> maybeFunctor(): Functor<Maybe<A>, A> = object : Functor<Maybe<A>, A> {
-
-        override fun <B> map(box: Maybe<A>, f: (A) -> B): Functor<Maybe<A>, B> {
-
-            when(box) {
-                Just<A>(a) -> Just(f(a))
-                Empty -> Empty
-            }
-        }
-
-
-*//*        override fun <B> map(box: FunctorOf<Maybe<A>>, f: (A) -> B): Functor<Maybe<A>, B> {
-            when(box) {
-                Just<A>(a) -> Just(f(a))
-                Empty -> Empty
-            }
-        }*//*
-
-  *//*      override fun <A, B> map(box: FunctorOf<A>, f: (A) -> B): Functor<Maybe<A>, B> {
-            TODO("Not yet implemented")
-        }*//*
-    }*/
-
-    class MaybeFInstance<A> : Functor<Maybe<A>, A> {
-
-        override fun <B> map(box: Maybe<A>, f: (A) -> B): Maybe<B> {
-           return when {
+class FunctorInstances {
+    fun <A> maybeFunctor(): Functor<ForMaybe, A> = object : Functor<ForMaybe, A> {
+        override fun <A, B> map(box: MaybeOf<A>, f: (A) -> B): MaybeOf<B> {
+            return when {
                 box is Just -> Just(f(box.a))
-                box is Empty -> Empty
+                box is Empty -> box
+                else -> Empty
             }
         }
     }
-
-
 }
