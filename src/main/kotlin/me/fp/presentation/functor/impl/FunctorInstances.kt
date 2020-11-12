@@ -33,7 +33,7 @@ object Nill : MyListOf<Nothing>
 class FunctorInstances {
 
     fun <A> maybeFunctor(): Functor<ForMaybe, A> = object : Functor<ForMaybe, A> {
-        override fun <A, B> map(box: MaybeOf<A>, f: (A) -> B): MaybeOf<B> {
+        override fun <B> map(box: MaybeOf<A>, f: (A) -> B): MaybeOf<B> {
             return when (box) {
                 is Just -> Just(f(box.a))
                 is Empty -> box
@@ -43,7 +43,7 @@ class FunctorInstances {
     }
 
     fun <A> myListFunctor(): Functor<ForMyList, A> = object : Functor<ForMyList, A> {
-        override fun <A, B> map(box: MyListOf<A>, f: (A) -> B): MyListOf<B> {
+        override fun <B> map(box: MyListOf<A>, f: (A) -> B): MyListOf<B> {
             return when (box) {
                 is Cons -> Cons(f(box.head), map(box.tail, f))
                 is Nill -> box
