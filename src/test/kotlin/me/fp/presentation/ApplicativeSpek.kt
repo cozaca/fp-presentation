@@ -2,7 +2,6 @@ package me.fp.presentation
 
 import me.fp.presentation.applicative.impl.ApplicativeInstances
 import me.fp.presentation.functor.impl.Cons
-import me.fp.presentation.functor.impl.Empty
 import me.fp.presentation.functor.impl.Nill
 import me.fp.presentation.functor.impl.Just
 import org.assertj.core.api.Assertions.assertThat
@@ -27,10 +26,23 @@ class ApplicativeSpek : Spek({
             }
         }
 
+        on("associativity law") {
+            val elements = Cons(1, Cons(2, Nill))
+            val a = listApplicative.pure { a: Int -> a * 2 }
+            val b = listApplicative.pure { a: Int -> a * 3 }
+            val c = listApplicative.pure { a: Int -> a * 4 }
+            val actualLeftHand = listApplicative.ap(a, listApplicative.ap(b, listApplicative.ap(c, elements)))
+            val actualRightHand = listApplicative.ap(c, listApplicative.ap(a, listApplicative.ap(b, elements)))
+
+            it("law passed") {
+                assertThat(actualLeftHand).isEqualTo(actualRightHand)
+            }
+        }
+
         on("map list") {
             val actual = listApplicative.map(Cons(1, Cons(2, Nill))) { v -> v + 2 }
             it("verify mapping") {
-                assertThat(actual).isEqualTo(Cons(2, Cons(3,Nill)))
+                assertThat(actual).isEqualTo(Cons(3, Cons(4,Nill)))
             }
         }
     }
@@ -47,6 +59,23 @@ class ApplicativeSpek : Spek({
             it("law passed")
             {
                 assertThat(actual).isEqualTo(value)
+            }
+        }
+
+        on("associativity law")
+        {
+            val maybeApplicative = ApplicativeInstances().maybeApplicative<Int>()
+            val a = maybeApplicative.pure { a: Int -> a * 2 }
+            val b = maybeApplicative.pure { a: Int -> a * 3 }
+            val c = maybeApplicative.pure { a: Int -> a * 4 }
+            val value = Just(3)
+
+            it("law passed")
+            {
+                val actualLeftHand = maybeApplicative.ap(a, maybeApplicative.ap(b, maybeApplicative.ap(c, value)))
+                val actualRightHand = maybeApplicative.ap(c, maybeApplicative.ap(b, maybeApplicative.ap(a, value)))
+
+                assertThat(actualLeftHand).isEqualTo(actualRightHand)
             }
         }
 
