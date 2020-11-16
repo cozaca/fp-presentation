@@ -44,5 +44,16 @@ dependencies {
             [group: 'com.ullink.ulbridge.plugins.odisys', name: 'ul-bridge-plugins-ul-odisys-core-test-framework', version: '1.9'],
             [group: 'com.blogspot.toomuchcoding', name: 'spock-subjects-collaborators-extension', version: '1.1.0'],
             [group: 'com.nagternal', name: 'spock-genesis', version: '0.6.0'],
+            [group: 'org.jetbrains.spek', name: 'spek-api', version: '1.1.5'],
+            [group: 'org.jetbrains.spek', name: 'spek-subject-extension', version: '1.1.5'],
+            [group: 'org.jetbrains.spek', name: 'spek-data-driven-extension', version: '1.1.5'],
+            [group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'],
+            [group: 'com.ullink.spek', name: 'spek-junit-rules', version: '0.1'],
+    )
+
+    testRuntime(
+            [group: 'org.jetbrains.spek', name: 'spek-junit-platform-engine', version: '1.1.5'],
+            [group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.1.0'],
+            [group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.1.0'],
     )
 }
